@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+
 using namespace std;
 
 string twoDigitSumer(string a, string b)
@@ -8,10 +9,10 @@ string twoDigitSumer(string a, string b)
     int carry = 0;
     string res = "";
 
-    while (i >= 0 || j >= 0 || carry)
+    while(i >= 0 || j >= 0 || carry)
     {
         long sum = 0;
-        if (i >= 0)
+        if(i >= 0)
         {
             sum += a[i] - '0';
             i--;
@@ -32,29 +33,24 @@ string twoDigitSumer(string a, string b)
 
 string twoDigiSubtraction(string a, string b)
 {
+    bool negative = false;
+    if (b.size() > a.size() || (b.size() == a.size() && b > a))
+    {
+        swap(a, b);
+        negative = true;
+    }
+
     int i = a.size() - 1;
     int j = b.size() - 1;
-
     int borrow = 0;
     string res = "";
 
-    while (i >= 0 || j >= 0 || borrow)
+    while(i >= 0 || j >= 0)
     {
-        int digitA = 0;
-        int digitB = 0;
-        if (i >= 0)
-        {
-            digitA = a[i] - '0';
-        }
+        int digitA = i >= 0 ? a[i] - '0' : 0;
+        int digitB = j >= 0 ? b[j] - '0' : 0;
 
-        if (j >= 0)
-        {
-            digitB = b[j] - '0';
-        }
-
-        digitA -= borrow;
-
-        if (digitA < digitB)
+        if(digitA < digitB + borrow)
         {
             digitA += 10;
             borrow = 1;
@@ -64,14 +60,20 @@ string twoDigiSubtraction(string a, string b)
             borrow = 0;
         }
 
-        res = char(digitA - digitB + '0') + res;
+        res = char(digitA - digitB - borrow + '0') + res;
 
         i--;
         j--;
     }
+
     while(res.size() > 1 && res[0] == '0')
     {
         res.erase(res.begin());
+    }
+
+    if (negative)
+    {
+        res = '-' + res;
     }
 
     return res;
@@ -83,19 +85,19 @@ string twoDigitMultiplier(string num1, string num2)
 
     string result = "0";
     int i = num2.size() - 1;
-    while (i >= 0)
+    while(i >= 0)
     {
         string current = "";
         int carry = 0;
         int j = num1.size() - 1;
-        while (j >= 0)
+        while(j >= 0)
         {
             int temp = ((num1[j] - '0') * (num2[i] - '0')) + carry;
             carry = temp / 10;
             current = char(temp % 10 + '0') + current;
             j--;
         }
-        if (carry > 0)
+        if  (carry > 0)
         {
             current = char(carry + '0') + current;
         }
@@ -107,105 +109,110 @@ string twoDigitMultiplier(string num1, string num2)
     return result;
 }
 
-
 int main()
 {
-    string n = "21111+23135 + 22";
+    string n = "138181+28183818+88*121313+391938*121";
 
     char mult = '+';
     char mult2 = '-';
     char mult3 = '*';
 
-    string temp = "";
-    string temp2 = "";
-    string mainTemp = "";
-
-    int num = n.find(mult);
-    int num2 = n.find(mult2);
-    int num3 = n.find(mult3);
-    
-    // if(num3 != -1)
-        // {
-    //     for(int i = num3 - 1; i >= 0; i--)
-                // {
-    //         if(isdigit(n[i])){
-    //             temp = n[i] + temp;
-    //         }else{
-    //             break;
-    //         }
-    //     }
-    //     for(int j = num3 + 1; j < n.size(); j++)
+    while(n.find(mult3) != -1)
     {
-    //         if (isdigit(n[j]))
-    {
-    //             temp2 =  temp2 + n[j];
-    //         } else
-        //   {
-    //             break;
-    //         }
-    //     }
-    //     mainTemp = twoDigitMultiplier(temp, temp2);
-    // }
-    
-    // temp = "";
-    // temp2 = "";
-    
-    if(num != -1){
-        for (int i = num - 1; i >= 0; i--)
-        {
-            if (isdigit(n[i]))
-            {
-                temp = n[i] + temp;
-            }else{
-                break;
-            }
-        }
-        for (int j = num + 1; j < n.size(); j++)
-        {
-            if(isdigit(n[j]))
-            {
-                temp2 =  temp2 + n[j];
-            } else
-            {
-                break;
-            }
-        }
-        mainTemp += twoDigitSumer(temp, temp2);
-    }
+        int num3 = n.find(mult3);
 
-    temp = "";
-    temp2 = "";
+        string temp = "";
+        string temp2 = "";
 
-    if(num2 != -1)
-    {
-        for(int i = num2 - 1; i >= 0; i--)
+        for(int i = num3 - 1; i >= 0; i--)
         {
             if(isdigit(n[i]))
             {
                 temp = n[i] + temp;
-            }else
+            }
+            else
             {
                 break;
             }
         }
-        for(int j = num2 + 1; j < n.size(); j++)
+
+        for (int j = num3 + 1; j < n.size(); j++)
         {
             if(isdigit(n[j]))
             {
-                temp2 =  temp2 + n[j];
-            }else
+                temp2 = temp2 + n[j];
+            }
+            else
             {
                 break;
             }
         }
-        mainTemp = twoDigiSubtraction(mainTemp, temp2);
-    }
-   
-    
-    
-    
-    
 
-    cout << mainTemp;
+        string res = twoDigitMultiplier(temp, temp2);
+
+        n.erase(num3 - temp.size(), temp.size() + temp2.size() + 1);
+        n.insert(num3 - temp.size(), res);
+    }
+
+    while(n.find(mult) != -1)
+    {
+        int num = n.find(mult);
+
+        string temp = "";
+        string temp2 = "";
+
+        for(int i = num - 1; i >= 0; i--)
+        {
+            if (isdigit(n[i]))
+            {
+                temp = n[i] + temp;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        for(int j = num + 1; j < n.size() && isdigit(n[j]); j++)
+        {
+            temp2 = temp2 + n[j];
+        }
+
+        string res = twoDigitSumer(temp, temp2);
+
+        n.erase(num - temp.size(), temp.size() + temp2.size() + 1);
+        n.insert(num - temp.size(), res);
+    }
+    while(n.find(mult2) != -1)
+    {
+        int num2 = n.find(mult2);
+
+        string temp = "";
+        string temp2 = "";
+
+        for(int i = num2 - 1; i >= 0; i--)
+        {
+            if (isdigit(n[i]))
+            {
+                temp = n[i] + temp;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        for(int j = num2 + 1; j < n.size() && isdigit(n[j]); j++)
+        {
+            temp2 = temp2 + n[j];
+        }
+
+        string res = twoDigiSubtraction(temp, temp2);
+
+        n.erase(num2 - temp.size(), temp.size() + temp2.size() + 1);
+        n.insert(num2 - temp.size(), res);
+    }
+
+    cout << n;
     return 0;
 }
