@@ -30,19 +30,31 @@ string twoDigitSumer(string a, string b)
     return res;
 }
 
-string twoDigitMinuser(string a, string b)
+string twoDigiSubtraction(string a, string b)
 {
     int i = a.size() - 1;
     int j = b.size() - 1;
+
     int borrow = 0;
     string res = "";
 
-    while (i >= 0 || j >= 0)
+    while (i >= 0 || j >= 0 || borrow)
     {
-        int digitA = i >= 0 ? a[i] - '0' : 0;
-        int digitB = j >= 0 ? b[j] - '0' : 0;
+        int digitA = 0;
+        int digitB = 0;
+        if (i >= 0)
+        {
+            digitA = a[i] - '0';
+        }
 
-        if (digitA < digitB + borrow)
+        if (j >= 0)
+        {
+            digitB = b[j] - '0';
+        }
+
+        digitA -= borrow;
+
+        if (digitA < digitB)
         {
             digitA += 10;
             borrow = 1;
@@ -52,13 +64,12 @@ string twoDigitMinuser(string a, string b)
             borrow = 0;
         }
 
-        res = char(digitA - digitB - borrow + '0') + res;
+        res = char(digitA - digitB + '0') + res;
 
         i--;
         j--;
     }
-
-    while (res.size() > 1 && res[0] == '0')
+    while(res.size() > 1 && res[0] == '0')
     {
         res.erase(res.begin());
     }
