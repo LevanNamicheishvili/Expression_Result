@@ -106,17 +106,106 @@ string twoDigitMultiplier(string num1, string num2)
     }
     return result;
 }
+
+
 int main()
 {
-    string n;
-    string n = "21111+23135-1"
+    string n = "21111+23135 + 22";
 
-        char mult = "*";
+    char mult = '+';
+    char mult2 = '-';
+    char mult3 = '*';
 
-    n.find(mult);
+    string temp = "";
+    string temp2 = "";
+    string mainTemp = "";
 
     int num = n.find(mult);
+    int num2 = n.find(mult2);
+    int num3 = n.find(mult3);
+    
+    // if(num3 != -1)
+        // {
+    //     for(int i = num3 - 1; i >= 0; i--)
+                // {
+    //         if(isdigit(n[i])){
+    //             temp = n[i] + temp;
+    //         }else{
+    //             break;
+    //         }
+    //     }
+    //     for(int j = num3 + 1; j < n.size(); j++)
+    {
+    //         if (isdigit(n[j]))
+    {
+    //             temp2 =  temp2 + n[j];
+    //         } else
+        //   {
+    //             break;
+    //         }
+    //     }
+    //     mainTemp = twoDigitMultiplier(temp, temp2);
+    // }
+    
+    // temp = "";
+    // temp2 = "";
+    
+    if(num != -1){
+        for (int i = num - 1; i >= 0; i--)
+        {
+            if (isdigit(n[i]))
+            {
+                temp = n[i] + temp;
+            }else{
+                break;
+            }
+        }
+        for (int j = num + 1; j < n.size(); j++)
+        {
+            if(isdigit(n[j]))
+            {
+                temp2 =  temp2 + n[j];
+            } else
+            {
+                break;
+            }
+        }
+        mainTemp += twoDigitSumer(temp, temp2);
+    }
 
-    cout << num;
+    temp = "";
+    temp2 = "";
+
+    if(num2 != -1)
+    {
+        for(int i = num2 - 1; i >= 0; i--)
+        {
+            if(isdigit(n[i]))
+            {
+                temp = n[i] + temp;
+            }else
+            {
+                break;
+            }
+        }
+        for(int j = num2 + 1; j < n.size(); j++)
+        {
+            if(isdigit(n[j]))
+            {
+                temp2 =  temp2 + n[j];
+            }else
+            {
+                break;
+            }
+        }
+        mainTemp = twoDigiSubtraction(mainTemp, temp2);
+    }
+   
+    
+    
+    
+    
+
+    cout << mainTemp;
     return 0;
 }
