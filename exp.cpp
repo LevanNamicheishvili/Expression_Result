@@ -9,10 +9,10 @@ string twoDigitSumer(string a, string b)
     int carry = 0;
     string res = "";
 
-    while(i >= 0 || j >= 0 || carry)
+    while (i >= 0 || j >= 0 || carry)
     {
         long sum = 0;
-        if(i >= 0)
+        if (i >= 0)
         {
             sum += a[i] - '0';
             i--;
@@ -33,6 +33,7 @@ string twoDigitSumer(string a, string b)
 
 string twoDigiSubtraction(string a, string b)
 {
+
     bool negative = false;
     if (b.size() > a.size() || (b.size() == a.size() && b > a))
     {
@@ -45,12 +46,14 @@ string twoDigiSubtraction(string a, string b)
     int borrow = 0;
     string res = "";
 
-    while(i >= 0 || j >= 0)
+    while (i >= 0 || j >= 0)
     {
         int digitA = i >= 0 ? a[i] - '0' : 0;
         int digitB = j >= 0 ? b[j] - '0' : 0;
 
-        if(digitA < digitB + borrow)
+        digitA -= borrow;
+
+        if (digitA < digitB)
         {
             digitA += 10;
             borrow = 1;
@@ -60,13 +63,13 @@ string twoDigiSubtraction(string a, string b)
             borrow = 0;
         }
 
-        res = char(digitA - digitB - borrow + '0') + res;
+        res = char(digitA - digitB + '0') + res;
 
         i--;
         j--;
     }
 
-    while(res.size() > 1 && res[0] == '0')
+    while (res.size() > 1 && res[0] == '0')
     {
         res.erase(res.begin());
     }
@@ -85,19 +88,19 @@ string twoDigitMultiplier(string num1, string num2)
 
     string result = "0";
     int i = num2.size() - 1;
-    while(i >= 0)
+    while (i >= 0)
     {
         string current = "";
         int carry = 0;
         int j = num1.size() - 1;
-        while(j >= 0)
+        while (j >= 0)
         {
             int temp = ((num1[j] - '0') * (num2[i] - '0')) + carry;
             carry = temp / 10;
             current = char(temp % 10 + '0') + current;
             j--;
         }
-        if  (carry > 0)
+        if (carry > 0)
         {
             current = char(carry + '0') + current;
         }
@@ -111,22 +114,22 @@ string twoDigitMultiplier(string num1, string num2)
 
 int main()
 {
-    string n = "138181+28183818+88*121313+391938*121";
+    string n = "110-123";
 
     char mult = '+';
     char mult2 = '-';
     char mult3 = '*';
 
-    while(n.find(mult3) != -1)
+    while (n.find(mult3) != -1)
     {
         int num3 = n.find(mult3);
 
         string temp = "";
         string temp2 = "";
 
-        for(int i = num3 - 1; i >= 0; i--)
+        for (int i = num3 - 1; i >= 0; i--)
         {
-            if(isdigit(n[i]))
+            if (isdigit(n[i]))
             {
                 temp = n[i] + temp;
             }
@@ -138,7 +141,7 @@ int main()
 
         for (int j = num3 + 1; j < n.size(); j++)
         {
-            if(isdigit(n[j]))
+            if (isdigit(n[j]))
             {
                 temp2 = temp2 + n[j];
             }
@@ -154,14 +157,14 @@ int main()
         n.insert(num3 - temp.size(), res);
     }
 
-    while(n.find(mult) != -1)
+    while (n.find(mult) != -1)
     {
         int num = n.find(mult);
 
         string temp = "";
         string temp2 = "";
 
-        for(int i = num - 1; i >= 0; i--)
+        for (int i = num - 1; i >= 0; i--)
         {
             if (isdigit(n[i]))
             {
@@ -173,7 +176,7 @@ int main()
             }
         }
 
-        for(int j = num + 1; j < n.size() && isdigit(n[j]); j++)
+        for (int j = num + 1; j < n.size() && isdigit(n[j]); j++)
         {
             temp2 = temp2 + n[j];
         }
@@ -183,14 +186,14 @@ int main()
         n.erase(num - temp.size(), temp.size() + temp2.size() + 1);
         n.insert(num - temp.size(), res);
     }
-    while(n.find(mult2) != -1)
+    while (n.find(mult2) != -1)
     {
         int num2 = n.find(mult2);
 
         string temp = "";
         string temp2 = "";
 
-        for(int i = num2 - 1; i >= 0; i--)
+        for (int i = num2 - 1; i >= 0; i--)
         {
             if (isdigit(n[i]))
             {
@@ -202,7 +205,7 @@ int main()
             }
         }
 
-        for(int j = num2 + 1; j < n.size() && isdigit(n[j]); j++)
+        for (int j = num2 + 1; j < n.size() && isdigit(n[j]); j++)
         {
             temp2 = temp2 + n[j];
         }
