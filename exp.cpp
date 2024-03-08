@@ -114,7 +114,8 @@ string twoDigitMultiplier(string num1, string num2)
 
 int main()
 {
-    string n = "110-123";
+    string n;
+    cin >> n;
 
     char mult = '+';
     char mult2 = '-';
@@ -157,63 +158,41 @@ int main()
         n.insert(num3 - temp.size(), res);
     }
 
-    while (n.find(mult) != -1)
+    for (int num = 0; num < n.size(); num++)
     {
-        int num = n.find(mult);
-
-        string temp = "";
-        string temp2 = "";
-
-        for (int i = num - 1; i >= 0; i--)
+        if (n[num] == '+' || n[num] == '-')
         {
-            if (isdigit(n[i]))
+            string temp = "";
+            string temp2 = "";
+
+            int i = num - 1;
+            while (i >= 0 && isdigit(n[i]))
             {
                 temp = n[i] + temp;
+                i--;
+            }
+
+            int j = num + 1;
+            while (j < n.size() && isdigit(n[j]))
+            {
+                temp2 = temp2 + n[j];
+                j++;
+            }
+
+            string res;
+            if (n[num] == '+')
+            {
+                res = twoDigitSumer(temp, temp2);
             }
             else
             {
-                break;
+                res = twoDigiSubtraction(temp, temp2);
             }
+
+            n.erase(i + 1, temp.size() + temp2.size() + 1);
+            n.insert(i + 1, res);
+            num = i + res.size();
         }
-
-        for (int j = num + 1; j < n.size() && isdigit(n[j]); j++)
-        {
-            temp2 = temp2 + n[j];
-        }
-
-        string res = twoDigitSumer(temp, temp2);
-
-        n.erase(num - temp.size(), temp.size() + temp2.size() + 1);
-        n.insert(num - temp.size(), res);
-    }
-    while (n.find(mult2) != -1)
-    {
-        int num2 = n.find(mult2);
-
-        string temp = "";
-        string temp2 = "";
-
-        for (int i = num2 - 1; i >= 0; i--)
-        {
-            if (isdigit(n[i]))
-            {
-                temp = n[i] + temp;
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        for (int j = num2 + 1; j < n.size() && isdigit(n[j]); j++)
-        {
-            temp2 = temp2 + n[j];
-        }
-
-        string res = twoDigiSubtraction(temp, temp2);
-
-        n.erase(num2 - temp.size(), temp.size() + temp2.size() + 1);
-        n.insert(num2 - temp.size(), res);
     }
 
     cout << n;
