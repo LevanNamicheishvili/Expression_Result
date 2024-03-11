@@ -162,7 +162,8 @@ int main()
     while (n.find(mult) != -1)
     {
         int num3 = n.find(mult);
-
+        bool hasMinus = false;
+        int tempIndex;
         string temp = "";
         string temp2 = "";
 
@@ -174,6 +175,11 @@ int main()
             }
             else
             {
+                if (n[i] == '-')
+                {
+                    hasMinus = true;
+                    tempIndex = i;
+                }
                 break;
             }
         }
@@ -189,6 +195,22 @@ int main()
                 break;
             }
         }
+        // 100 - 120 + 200;
+        if (hasMinus)
+        {
+            string outP = twoDigiSubtraction(temp, temp2);
+            n.erase(num3 - temp.size(), temp.size() + temp2.size() + 1);
+            if (outP[0] == '-')
+            {
+                outP.erase(0, 1);
+
+                n[tempIndex] = '+';
+            }
+
+            n.insert(num3 - temp.size(), outP);
+            continue;
+        }
+        // cout << n<<endl;
 
         string res = twoDigitSumer(temp, temp2);
 
