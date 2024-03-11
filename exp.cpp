@@ -35,10 +35,11 @@ string twoDigiSubtraction(string a, string b)
 {
 
     bool negative = false;
+
     if (b.size() > a.size() || (b.size() == a.size() && b > a))
     {
         swap(a, b);
-        negative = true;
+        negative = !negative;
     }
 
     int i = a.size() - 1;
@@ -116,7 +117,7 @@ int main()
 {
     string n;
     cin >> n;
-
+    vector<string> arr;
     char mult = '+';
     char mult2 = '-';
     char mult3 = '*';
@@ -158,41 +159,110 @@ int main()
         n.insert(num3 - temp.size(), res);
     }
 
-    for (int num = 0; num < n.size(); num++)
+    while (n.find(mult) != -1)
     {
-        if (n[num] == '+' || n[num] == '-')
-        {
-            string temp = "";
-            string temp2 = "";
+        int num3 = n.find(mult);
 
-            int i = num - 1;
-            while (i >= 0 && isdigit(n[i]))
+        string temp = "";
+        string temp2 = "";
+
+        for (int i = num3 - 1; i >= 0; i--)
+        {
+            if (isdigit(n[i]))
             {
                 temp = n[i] + temp;
-                i--;
-            }
-
-            int j = num + 1;
-            while (j < n.size() && isdigit(n[j]))
-            {
-                temp2 = temp2 + n[j];
-                j++;
-            }
-
-            string res;
-            if (n[num] == '+')
-            {
-                res = twoDigitSumer(temp, temp2);
             }
             else
             {
-                res = twoDigiSubtraction(temp, temp2);
+                break;
+            }
+        }
+
+        for (int j = num3 + 1; j < n.size(); j++)
+        {
+            if (isdigit(n[j]))
+            {
+                temp2 = temp2 + n[j];
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        string res = twoDigitSumer(temp, temp2);
+
+        n.erase(num3 - temp.size(), temp.size() + temp2.size() + 1);
+        n.insert(num3 - temp.size(), res);
+    }
+
+    while (n.find(mult2) != -1)
+    {
+        int num3 = n.find(mult2);
+
+        string temp = "";
+        string temp2 = "";
+        vector<string> arr;
+
+        for (int i = num3 - 1; i >= 0; i--)
+        {
+            if (isdigit(n[i]))
+            {
+                temp = n[i] + temp;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        for (int j = num3 + 1; j < n.size(); j++)
+        {
+            if (isdigit(n[j]))
+            {
+                temp2 = temp2 + n[j];
+            }
+            else
+            {
+                break;
+            }
+        }
+        string ans;
+        if (n[0] == '-')
+        {
+            for (int k = 1; k < n.size(); k++)
+            {
+                if (isdigit(n[k]))
+                {
+                    temp = temp + n[k];
+                }
+                else
+                {
+                    arr.push_back(temp);
+
+                    temp = "";
+                }
+            }
+            if (temp != "")
+            {
+                arr.push_back(temp);
             }
 
-            n.erase(i + 1, temp.size() + temp2.size() + 1);
-            n.insert(i + 1, res);
-            num = i + res.size();
+            ans = arr[0];
+
+            for (int i = 1; i < arr.size(); i++)
+            {
+                ans = twoDigitSumer(ans, arr[i]);
+            }
+
+            cout << '-' << ans;
+            return 0;
         }
+
+        string res = twoDigiSubtraction(temp, temp2);
+
+        n.erase(num3 - temp.size(), temp.size() + temp2.size() + 1);
+        n.insert(num3 - temp.size(), res);
     }
 
     cout << n;
